@@ -19,6 +19,10 @@ const Admin = new mongoose.Schema({
         type: String,
         required:true,
         minLength:10
+    },
+    status:{
+        type: Boolean,
+        default: true
     }
 })
 

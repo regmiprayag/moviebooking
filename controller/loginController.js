@@ -3,7 +3,6 @@ import bcrypt from "bcryptjs"
 import jwt from 'jsonwebtoken'
 
 class LoginCtrl{
-    
     check = async(req,res,next)=>{
         try{
             const { email,password }=req.body

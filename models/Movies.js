@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import mongoose, { Schema } from "mongoose"
 
 const Movie = new mongoose.Schema({
     title:{
@@ -18,7 +18,6 @@ const Movie = new mongoose.Schema({
     },
     posterUrl:{
         type:String,
-        require:true
     },
     director:{
         type:String,
@@ -28,13 +27,13 @@ const Movie = new mongoose.Schema({
         type:Boolean
     },
     price:{
-        type:Number,
-        // required:true
+        type: String,
+        required:true
     },
-    admin:{
-        type:mongoose.Types.ObjectId,
-        ref:"Admin",
-        require:true
+    adminId:{
+        type: Schema.Types.ObjectId,
+        ref:'Admin',
+        required:true
     }
 })
 

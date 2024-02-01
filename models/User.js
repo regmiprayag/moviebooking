@@ -14,6 +14,10 @@ const User = new mongoose.Schema({
         type:String,
         required:true,
         minLength:6
+    },
+    status:{
+        type: Boolean,
+        default: true
     }
 })
 

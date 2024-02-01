@@ -24,7 +24,7 @@ class AdminCtrl {
         } catch(err) {
             showError(err)
         }
-        if(!user){
+        if(!admins){
             return res.status(400).json({message:"Admin with this id not found"})
         }
         return res.status(200).json({message: admins})

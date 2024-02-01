@@ -26,14 +26,18 @@ const Movie = new mongoose.Schema({
     featured:{
         type:Boolean
     },
-    price:{
+    genre:[{
         type: String,
         required:true
-    },
+    }],
     adminId:{
         type: Schema.Types.ObjectId,
         ref:'Admin',
         required:true
+    },
+    movieStatus:{
+        type: String,
+        enum: ['available', 'unavailable'],
     }
 })
 

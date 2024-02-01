@@ -1,4 +1,5 @@
 import { showError } from "../lib/index.js";
+import Seat from "../models/Seat.js";
 import Showtime from "../models/Showtime.js";
 
 
@@ -11,14 +12,16 @@ class ShowtimeCtrl{
             showError(err,next)
         }
     }
-    addShows=async(req,res,next)=>{
+
+    
+    deleteShow=async(req,res,next)=>{
         try{
-            const movieId = req.params.id
-            const {startTime,endTime} = req.body
-            await Showtime.create({
-                startTime,endTime,movieId
+            const showtimeId = req.params.id
+            await Seat.deleteMany({
+                showtimeId: showtimeId
             })
-            res.status(201).json({message: "Showtime has been added"})
+            await Showtime.findByIdAndDelete(showtimeId)
+            res.send({message:"Showtime deleted successfully"})
         }catch(err){
             showError(err,next)
         }

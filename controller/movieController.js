@@ -1,4 +1,7 @@
+import { showError } from "../lib/index.js";
 import Movies from "../models/Movies.js";
+import Seat from "../models/Seat.js";
+import Showtime from "../models/Showtime.js";
 
 class MoviesCtrl {
     getAllMovies = async (req, res, next) => {
@@ -54,6 +57,9 @@ class MoviesCtrl {
         const id = req.params.id;
         let movie
         try{
+            await Showtime.deleteMany({
+                movieId:id
+            })
             movie = await Movies.findByIdAndDelete(id)        
         }catch(err){
             return res.status(400).json({error:"Error occured by this id"})
@@ -62,6 +68,24 @@ class MoviesCtrl {
             return res.status(404).json({message:"No movie found"})
         }
         return res.status(500).json({message:"Deleted Successfully"})
+    }
+
+    addShows=async(req,res,next)=>{
+        let showtime;
+        try{
+            const movieId = req.params.id
+            const {startTime,endTime} = req.body
+            showtime = await Showtime.create({
+                startTime,endTime,movieId
+            })
+            await Seat.create({
+              showtimeId: showtime._id,
+              seatNumber: Array(10).fill().map((element, index) => index + 1)
+            });
+            res.status(201).json({message: "Showtime has been added"})
+        }catch(err){
+            return res.status(400).json({message:"Cannot create show"})
+        }
     }
 }
 export default new MoviesCtrl

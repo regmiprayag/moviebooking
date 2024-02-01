@@ -6,6 +6,6 @@ router.route("/")
     .get(ShowtimeCtrl.getAllShows)
 
 router.route("/:id")
-    .post(ShowtimeCtrl.addShows)
+    .delete(ShowtimeCtrl.deleteShow)
 
 export default router

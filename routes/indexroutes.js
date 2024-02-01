@@ -6,7 +6,7 @@ import { isAdminLoggedIn, isUserLoggedIn } from "../lib/index.js"
 const router = express.Router()
 
 router.use("/cms",isAdminLoggedIn,cmsRoutes)
-router.post("/login",LoginCtrl.check)
+router.post("/login",LoginCtrl.checkAdmin)
 // router.use("/cms",isUserLoggedIn,cmRoutes)
 
 export default router

@@ -10,6 +10,5 @@ router.route("/:id")
     .get(UserCtrl.show)
     .put(UserCtrl.updateUser)
     .delete(UserCtrl.deleteUser)
-    .post(UserCtrl.loginUser)
 
 export default router

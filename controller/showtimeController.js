@@ -12,7 +12,6 @@ class ShowtimeCtrl{
             showError(err,next)
         }
     }
-
     
     deleteShow=async(req,res,next)=>{
         try{

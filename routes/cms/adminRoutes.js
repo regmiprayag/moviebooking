@@ -10,6 +10,5 @@ router.route("/:id")
     .get(AdminCtrl.show)
     .put(AdminCtrl.updateAdmin)
     .delete(AdminCtrl.deleteAdmin)
-    .post(AdminCtrl.loginAdmin)
 
 export default router

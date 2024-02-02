@@ -16,6 +16,20 @@ class UserCtrl {
         return res.status(200).json({users})
     }
 
+    getUserById = async(req,res,next)=>{
+        let users;
+        try{
+            users = await User.findById(req.params.id)
+        }
+        catch(err){
+            return next(err)
+        }
+        if(!users){
+            return res.status(500).send({message: "No any Users found"})
+        }
+        return res.status(200).json({users})
+    }
+
     show = async (req, res, next) => {
         let user
         try {

@@ -7,8 +7,12 @@ class LoginCtrl{
     checkAdmin = async(req,res,next)=>{
         try{
             const { email,password }=req.body
+            // return res.send({email,password})
             const admin = await Admin.findOne({email})
+            // return res.send({admin})
             if(admin){
+                // const pass = bcrypt.compareSync(password, admin.password)
+                // return res.send({pass})
                 if(bcrypt.compareSync(password, admin.password)){
                     const token = jwt.sign({
                         id: admin._id,
@@ -30,8 +34,14 @@ class LoginCtrl{
     checkUser = async(req,res,next)=>{
         try{
             const { email,password }=req.body
+            // return res.send({email,password})
+
             const user = await User.findOne({email})
-            if(user){
+            // return res.send({user})
+            if(user){      
+                // return res.send({user})
+                // const pass =  bcrypt.compareSync(password, user.password)
+                // return res.send({pass})     
                 if(bcrypt.compareSync(password, user.password)){
                     const token = jwt.sign({
                         id: user._id,

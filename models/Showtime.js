@@ -10,7 +10,7 @@ const Showtime = new mongoose.Schema({
         required: true,
     },
     movieId:{
-        type: Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref:'Movie',
         required:true
     }

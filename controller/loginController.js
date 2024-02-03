@@ -46,7 +46,7 @@ class LoginCtrl{
                     const token = jwt.sign({
                         id: user._id,
                         iat: Math.floor(Date.now()/1000),
-                        exp: Math.floor(Date.now()/1000) + (30*24*60*60),
+                        exp: Math.floor(Date.now()/1000) + (60*60),
                     }, process.env.JWT_SECRET)
                     return res.json({token: token})
                 }else{

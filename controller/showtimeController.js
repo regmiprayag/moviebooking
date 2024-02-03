@@ -4,15 +4,19 @@ import Showtime from "../models/Showtime.js";
 
 
 class ShowtimeCtrl{
-    getAllShows=async(req,res,next)=>{
+    getShows=async(req,res,next)=>{
         try{
-            const showtime = await Showtime.find()
-            res.send(showtime)
+            const movieId = req.params.id
+            const showtime = await Showtime.find({movieId: movieId})
+            // const showtime = await Showtime.findOne()
+
+            res.json({message: showtime})
+            // res.json( showtime )
         }catch(err){
             showError(err,next)
         }
     }
-    
+
     deleteShow=async(req,res,next)=>{
         try{
             const showtimeId = req.params.id

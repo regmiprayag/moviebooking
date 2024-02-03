@@ -3,7 +3,7 @@ import Booking from "../models/Booking.js";
 import User from "../models/User.js";
 
 class BookingCtrl{
-    addBookings=async(req,res,next)=>{
+    createBooking=async(req,res,next)=>{
         try{
             const user = await User.findById();
 
@@ -17,10 +17,11 @@ class BookingCtrl{
         }
     }
     showBookings=async(req,res,next)=>{
-        let date = new Date((Date.now()))
-        return res.send({date})
+        // let date = Math.floor((Date.now())/1000)
+        // return res.send("hello")
         try{
             const bookings = await Booking.find()
+            return res.json({bookings})
             res.send(bookings)
         }catch(err){
             showError(err,next)

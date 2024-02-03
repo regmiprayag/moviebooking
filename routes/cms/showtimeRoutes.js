@@ -3,7 +3,7 @@ import { ShowtimeCtrl } from "../../controller/index.js"
 const router = express.Router()
 
 router.route("/")
-    .get(ShowtimeCtrl.getAllShows)
+    .get(ShowtimeCtrl.getShows)
 
 router.route("/:id")
     .delete(ShowtimeCtrl.deleteShow)

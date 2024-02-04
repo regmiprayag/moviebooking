@@ -4,7 +4,6 @@ const router = express.Router()
 
 router.route("/")
     .get(AdminCtrl.getAllAdmins)
-    .post(AdminCtrl.signup)
 
 router.route("/:id")
     .get(AdminCtrl.show)

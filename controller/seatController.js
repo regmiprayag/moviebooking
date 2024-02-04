@@ -3,9 +3,11 @@ import Seat from "../models/Seat.js"
 
 
 class SeatCtrl {
-    getAllSeats = async(req,res,next)=>{
+    getSeats = async(req,res,next)=>{
+        const showtimeId = req.params.id
+        // return res.json({showtimeId: showtimeId})
         try{
-            const seat = await Seat.find()
+            const seat = await Seat.findOne({showtimeId:showtimeId})
             res.json(seat)
         }catch(err){
             showError(err,next)

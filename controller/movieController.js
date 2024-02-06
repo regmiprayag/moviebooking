@@ -7,7 +7,9 @@ class MoviesCtrl {
     getAllMovies = async (req, res, next) => {
         let movies;
         try {
-            movies = await Movies.find()
+            movies = await Movies.aggregate([
+                {$lookup: {from: 'admins', localField: 'adminId', foreignField: '_id', as: 'admin'}}
+            ]).exec();
         }
         catch (err) {
             return res.status(400).json({ message: err })
@@ -80,6 +82,11 @@ class MoviesCtrl {
               showtimeId: showtime._id,
               seatNumber: Array(10).fill().map((element, index) => index + 1)
             });
+
+            /**
+             * 
+             * INSERT INTO seats (showtime_id, seats) VALUE (showtime_id, generate_series(1, 20))
+             */
             res.status(201).json({message: "Showtime has been added"})
         }catch(err){
             return res.status(400).json({message:"Cannot create show"})

@@ -13,5 +13,16 @@ class SeatCtrl {
             showError(err,next)
         }
     }
+    updateSeat = async(req,res,next)=>{
+        const showtimeId = req.params.id
+        // return res.json({showtimeId: showtimeId})
+        try{
+            const seat = await Seat.findByIdAndUpdate({showtimeId:showtimeId,})
+
+            res.json(seat)
+        }catch(err){
+            showError(err,next)
+        }
+    }
 }
 export default new SeatCtrl

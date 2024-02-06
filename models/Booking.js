@@ -18,18 +18,14 @@ const Booking = new mongoose.Schema({
     },
     bookingDate:{
         type:Date,
-        required:true
-    },
-    bookedSeat:{
-        type:Number,
-        required:true
+        // required:true
     },
     amount:{
         type:Number,
-        required:true
+        // required:true
     },
     bookedSeat:{
-        type:Number,
+        type:[Number],
         required:true
     },
     

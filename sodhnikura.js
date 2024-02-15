@@ -15,3 +15,11 @@
 // How to find which seats are available to book and which are not available to book?
 // How to extract userId from the session
 // how to insert booking date while creating the bookings
+
+// everything upto here is solved
+
+//2023-10-23
+// I want to make the seats according with each seats having the 3 values either ['available','booked','pending']
+
+//Now The task left are:
+// To work on upload image, maintain confidentiality,

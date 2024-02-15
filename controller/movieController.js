@@ -23,7 +23,7 @@ class MoviesCtrl {
     getMovieById = async (req, res, next) => {
         let movies;
         try {
-            const {movieId}=req.params.id
+            const movieId = req.params.id
             movies = await Movies.findById(movieId)
         }
         catch (err) {
@@ -38,8 +38,9 @@ class MoviesCtrl {
     createMovie = async(req,res,next)=>{
         try{
             const { title,actors,featured,price,description,director,releaseDate} = req.body
-            
+            return res.json(actors)
             const posterUrl = req.file ? req.file.filename : ""
+            
             await Movies.create({
                 title, actors, posterUrl, description, director, releaseDate, featured, price, adminId: req.admin._id
             })

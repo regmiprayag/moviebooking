@@ -5,14 +5,14 @@ const Seat = new mongoose.Schema({
     },
     seatNumber : {
         type: [Number],
-        // unique:true
+        unique:true,
     },
     showtimeId:{
         type: mongoose.Types.ObjectId,
         ref:'Showtime',
         required:true
     },
-    isBooked: {
+    status: {
         type: String,
         enum: ['Booked', 'Available', 'Reserved'],
         default: 'Available',

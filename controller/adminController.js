@@ -16,6 +16,7 @@ class AdminCtrl {
         }
         return res.status(200).json({admins})
     }
+    
 
     show = async (req, res, next) => {
         let admins

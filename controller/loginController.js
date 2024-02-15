@@ -48,7 +48,7 @@ class LoginCtrl{
                         iat: Math.floor(Date.now()/1000),
                         exp: Math.floor(Date.now()/1000) + (60*60),//expires after 60 minute
                     }, process.env.JWT_SECRET)
-                    return res.json({token: token})
+                    return res.json({token: token,user})
                 }else{
                     return res.status(422).json({message: "Invalid Password"})
                 }

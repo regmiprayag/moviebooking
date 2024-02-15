@@ -7,6 +7,9 @@ const router = express.Router()
 
 router.use("/users",userRoutes)
 router.use("/movies",movieRoutes)
+router.get('/user/details', async (req, res, next) => {
+    res.json(req.user);
+})
 
 
 export default router

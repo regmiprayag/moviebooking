@@ -15,6 +15,7 @@ router.route("/addshows/:id")
 
 router.route("/:id")
     .delete(MoviesCtrl.deleteMovie)
+    .put(MoviesCtrl.updateMovieById)
 
 router.route("/:id")
     .get(MoviesCtrl.getMovieById)

@@ -20,6 +20,23 @@ class MoviesCtrl {
         return res.status(200).json({ movies })
     }
 
+    updateMovieById = async(req,res,next)=>{
+        let movies;
+        try{
+            const {releaseDate} = req.body
+            const movieId = req.params.id;
+            movies = await Movies.findByIdAndUpdate(movieId,{
+                releaseDate:releaseDate
+            });
+        }catch(err){
+            return res.json({message: err.message})
+        }
+        if(!movies){
+            return res.json({message: err.message})
+        }
+        return res.json({message: "Updated Successfully",movies})
+    }
+
     getMovieById = async (req, res, next) => {
         let movies;
         try {
@@ -38,7 +55,7 @@ class MoviesCtrl {
     createMovie = async(req,res,next)=>{
         try{
             const { title,actors,featured,price,description,director,releaseDate} = req.body
-            return res.json(actors)
+            // return res.json(actors)
             const posterUrl = req.file ? req.file.filename : ""
             
             await Movies.create({
@@ -75,22 +92,36 @@ class MoviesCtrl {
         let showtime;
         try{
             const movieId = req.params.id
-            const {startTime,endTime} = req.body
+            // return res.json({movieId})
+            const {showDate,showTime} = req.body
+            // return res.json({showDate,showTime})
             showtime = await Showtime.create({
-                startTime,endTime,movieId
+                showDate,showTime,movieId
             })
-            await Seat.create({
-              showtimeId: showtime._id,
-              seatNumber: Array(10).fill().map((element, index) => index + 1)
+
+            // console.log(showtime);
+            // return res.json({message:"shows has been created sucesfuly"})
+            if (!showtime) {
+                throw Error('Error while creating showtime!');
+            }
+
+            let seats;
+            seats = await Seat.create({
+                showtimeId: showtime._id,
+                seatNumber: Array(10).fill().map((element, index) => index + 1)
             });
 
-            /**
-             * 
-             * INSERT INTO seats (showtime_id, seats) VALUE (showtime_id, generate_series(1, 20))
-             */
-            res.status(201).json({message: "Showtime has been added"})
+            if (!seats) {
+                throw Error('Seat creation error!');
+            }
+
+            return res.status(200).json({
+                message: 'Showtimes and seats created successfully',
+                seats,
+                showtime
+            })
         }catch(err){
-            return res.status(400).json({message:"Cannot create show"})
+            return res.status(400).json({message:err.message})
         }
     }
 }

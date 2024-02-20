@@ -4,8 +4,9 @@ const Seat = new mongoose.Schema({
         type: Number
     },
     seatNumber : {
-        type: [Number],
-        unique:true,
+        type: Array,
+        required: true
+        // unique:true,
     },
     showtimeId:{
         type: mongoose.Types.ObjectId,

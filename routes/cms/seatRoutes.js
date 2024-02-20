@@ -3,7 +3,7 @@ import { SeatCtrl } from "../../controller/index.js"
 
 const router = express.Router()
 
-router.route("/")
+router.route("/:id")
     .get(SeatCtrl.getSeats)
 
 export default router

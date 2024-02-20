@@ -1,12 +1,12 @@
 import mongoose, { Schema } from "mongoose";
 
 const Showtime = new mongoose.Schema({
-    startTime : {
-        type: Date,
+    showDate : {
+        type: String,
         required: true,
     },
-    endTime : {
-        type: Date,
+    showTime : {
+        type: String,
         required: true,
     },
     movieId:{

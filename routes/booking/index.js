@@ -5,12 +5,13 @@ import { isUserLoggedIn } from "../../lib/index.js"
 
 const router = express.Router()
 
-router.post("/:id/create",isUserLoggedIn,BookingCtrl.createBooking)
+
+router.post("/createOrder",BookingCtrl.createOrder)
+router.post("/:id/create",BookingCtrl.createBooking)
 router.get("/",BookingCtrl.showBookings)
 router.delete("/:id",BookingCtrl.deleteBooking)
 router.get("/:id",BookingCtrl.showBookingsById)
 router.get("/showtimes/:id",ShowtimeCtrl.getShows)
 router.get("/seats/:id",SeatCtrl.getSeats)
-
 
 export default router

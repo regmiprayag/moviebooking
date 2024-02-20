@@ -1,4 +1,4 @@
-import { showError } from "../lib/index.js";
+import { createSignature, showError } from "../lib/index.js";
 import Booking from "../models/Booking.js";
 import Seat from "../models/Seat.js";
 import Showtime from "../models/Showtime.js";
@@ -6,16 +6,69 @@ import Showtime from "../models/Showtime.js";
 import mongoose from "mongoose"
 
 class BookingCtrl{
-    createBooking = async(req,res,next)=>{
-        if(req.user == undefined){
-            return res.status(401).json({
-                message:"Please login to continue"
-            })
+
+    createOrder = async (req, res, next) => {
+        try {
+            // console.log(req.body);
+            const { data } = req.body;
+            const amount = data.amount;
+            const movieId = data.movieId;
+            const uuid = performance.now();
+            // return res.json({amount,movieId,uuid})
+            const id = `${uuid}`.replace(".", "-");
+            // return res.json({id})
+
+            const signature = createSignature(
+                `total_amount=${amount},transaction_uuid=${id},product_code=EPAYTEST`
+                // total_amount=100,transaction_uuid=11-201-13,product_code=EPAYTEST
+            );
+            // return res.json({message: signature})
+
+            // return res.json({amount,movieId,uuid,signature})
+            
+            const formData = {
+                amount: amount,
+                failure_url: "http://localhost:3000/failure",
+                product_delivery_charge: "0",
+                product_service_charge: "0",
+                product_code: "EPAYTEST",
+                signature: signature,
+                signed_field_names: "total_amount,transaction_uuid,product_code",
+                success_url: `http://localhost:3000/${movieId}/success`,
+                tax_amount: "0",
+                total_amount: amount,
+                transaction_uuid: id,
+                // selectedSeats: 
+            };
+
+            return res.json({
+                message: "Order Created",
+                formData
+            });
+        } catch (err) {
+            return res.status(400).json({
+                message: err.message
+            });
         }
-        const user = req.user
-        const {seatNumber, showtimeId} = req.body
-        const movieId = req.params.id;
-        //starting a session and starting a transaction
+    }
+
+    createBooking = async(req,res,next)=>{
+        // return res.json({message:"Upto here is working"})
+        // if(req.user == undefined){
+        //     return res.status(401).json({
+        //         message:"Please login to continue"
+        //     })
+        // }
+        const user = "65b92c82aa69bcee5864d4bd";
+        const {seatNumber, showtimeId, movieId} = req.body
+        // movieId = movieId.id;
+        const movieid = movieId.id;
+        // const movieId = req.params;
+        // return res.json({movieIdii: movieId,message:"Yei ho movie id"})
+
+        // return res.json({message: "inside controller the seatnumbers are: ", seatNumbers:seatNumber, showtime: showtimeId, movieIdchaiyohohai:movieId})
+
+        let isSeats;
         const session = await mongoose.startSession();
         session.startTransaction();
         try{
@@ -24,37 +77,50 @@ class BookingCtrl{
                     message: "No seats provided for booking"
                 });
             }
-            const show = await Showtime.find({movieId})
-            const isSeats = await Seat.findOne({showtimeId})
+            // const show = await Showtime.findOne({movieId})
+            isSeats = await Seat.findOne({showtimeId:showtimeId})
+
+            // return res.json({findingSeatsare: isSeats,movieId,showtimeId})
+            if (!isSeats) {
+                return res.status(404).json({ message: "Seats not found for the provided showtimeId" });
+            }
+            
             for (let j = 0; j < seatNumber.length; j++) {
                 const seatExists = isSeats.seatNumber.includes(seatNumber[j]);
-                if (!seatExists) {
-                    return res.status(400).json({
-                        message: `Seat ${seatNumber[j]} is not available`
-                    });
+                if (seatExists) {
+                    const index = isSeats.seatNumber.indexOf(seatNumber[j]);
+                    isSeats.seatNumber.splice(index, 1);
                 }
                 else{
-                    const index = isSeats.seatNumber.indexOf(seatNumber[j]);
-                    const dele = isSeats.seatNumber.splice(index, 1);
+                    return res.json({message:"You refreshed the page"})
                 }
             }
-            await isSeats.save();
+            // return res.json({message:"Everything upto here is working perfectly",movie: movieId});
+            // return res.json({message: "inside controller the seatnumbers are: ", seatNumbers:seatNumber, showtime: showtimeId, movieIdchaiyohohai:movieId})
             //creating a booking 
             const createBooking = await Booking.create({
                 userId: user,
-                movieId,
+                movieId:movieid,
                 showtimeId,
                 bookedSeat: seatNumber
             });
+            // return res.json({message:createBooking,message:"Booking samma chalirako xa hai"})
+
             // when booking is created successfully then making updates
             if (createBooking) {
-                await Seat.updateMany(
-                    { showtimeId, seatNumber: { $in: seatNumber } },
-                    { $set: { status: "Booked" } }
-                );
+                // await Seat.updateMany(
+                //     { showtimeId, seatNumber: { $in: seatNumber } },
+                //     { $set: { status: "Booked" } }
+                // );
+                try {
+                    await Seat.findOneAndUpdate({ _id: isSeats._id }, { $pull: { seatNumber: { $in: seatNumber } } });;
+                    // return res.json({ message: "Seats booked successfully" });
+                } catch (error) {
+                    return res.status(500).json({ message: "Error updating seats", error: error.message });
+                }
                 await session.commitTransaction();
                 return res.status(201).json({
-                    message: "Booking created successfully"
+                    message: "Booking created successfully",showtimeId,movieid,user,seatNumber
                 });
             }
         }catch(err){

@@ -11,6 +11,8 @@ router.get("/movies",MoviesCtrl.getAllMovies)
 router.get("/movies/:id",MoviesCtrl.getMovieById)
 router.get("/users/:id",UserCtrl.getUserById)
 router.get("/showtimes/:id", ShowtimeCtrl.getShows)
+router.get("/showtimesToday", ShowtimeCtrl.getShowtimeToday)
+router.get("/showtimesTommorow", ShowtimeCtrl.getShowtimeTommorrow)
 router.get("/showtimeById/:id", ShowtimeCtrl.getShowtimeById)
 router.put("/showtimes/:id", ShowtimeCtrl.updateShows)
 

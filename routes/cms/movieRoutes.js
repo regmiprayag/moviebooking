@@ -8,7 +8,7 @@ const upload = multer({storage});
 
 router.route("/")
     .get(MoviesCtrl.getAllMovies)
-    .post(upload.single('posterUrl'),MoviesCtrl.createMovie)
+    .post(upload.single('image'),MoviesCtrl.createMovie)
 
 router.route("/addshows/:id")
     .post(MoviesCtrl.addShows)

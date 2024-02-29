@@ -4,14 +4,16 @@ import jwt from 'jsonwebtoken'
 import User from "../models/User.js";
 
 class LoginCtrl{
+
     checkAdmin = async(req,res,next)=>{
         try{
             const { email,password }=req.body
-            // return res.send({email,password})
+            // return res.status(200).json({email,password})
             const admin = await Admin.findOne({email})
-            // return res.send({admin})
+            // return res.json({admin})
             if(admin){
-                // const pass = bcrypt.compareSync(password, admin.password)
+                // return res.json({message:"chalyo hyaa samma ta"});
+                const pass = bcrypt.compareSync(password, admin.password)
                 // return res.send({pass})
                 if(bcrypt.compareSync(password, admin.password)){
                     const token = jwt.sign({
@@ -19,7 +21,7 @@ class LoginCtrl{
                         iat: Math.floor(Date.now()/1000),
                         exp: Math.floor(Date.now()/1000) + (30*24*60*60),
                     }, process.env.JWT_SECRET)
-                    return res.json({token: token})
+                    return res.json({message:"Login Successfull",token: token,admin})
                 }else{
                     return res.status(422).json({message: "Invalid Password"})
                 }

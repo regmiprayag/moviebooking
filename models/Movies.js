@@ -3,7 +3,8 @@ import mongoose, { Schema } from "mongoose"
 const Movie = new mongoose.Schema({
     title:{
         type:String,
-        require:true
+        require:true,
+        unique:true
     },
     releaseDate:{
         type:Date,

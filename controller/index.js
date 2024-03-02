@@ -5,5 +5,6 @@ import LoginCtrl from "./loginController.js";
 import ShowtimeCtrl from "./showtimeController.js"
 import BookingCtrl from "./bookingController.js";
 import SeatCtrl from "./seatController.js";
+import TicketCtrl from "./ticketController.js";
 
-export { AdminCtrl, UserCtrl, MoviesCtrl, LoginCtrl,ShowtimeCtrl,BookingCtrl,SeatCtrl }
+export { AdminCtrl, UserCtrl, MoviesCtrl, LoginCtrl,ShowtimeCtrl,BookingCtrl,SeatCtrl,TicketCtrl }

@@ -8,6 +8,19 @@ import mongoose from "mongoose"
 
 class BookingCtrl{
 
+    getAllBookings = async(req,res,next)=>{
+        let bookings;
+        try{
+            bookings = await Booking.find()
+        }catch(err){
+            console.log(err)
+        }
+        if(!bookings){
+            return res.json({message: "Bookings not found"})
+        }
+        return res.json({message: bookings});
+    }
+
     createOrder = async (req, res, next) => {
         try {
             // console.log(req.body);
@@ -62,15 +75,17 @@ class BookingCtrl{
         //     })
         // }
         const user = "65b92c82aa69bcee5864d4bd";
-        const {seatNumber, showtimeId, movieId} = req.body
+        const {seatNumber, showtimeId, movieId, showtime, showDate} = req.body
         // movieId = movieId.id;
         const movieid = movieId.id;
+
+        console.log("The selected Showtime is: ",seatNumber, showtimeId, movieid, showtime, showDate);
         // const movieId = req.params;
         // return res.json({movieIdii: movieId,message:"Yei ho movie id"})
 
         // return res.json({message: "inside controller the seatnumbers are: ", seatNumbers:seatNumber, showtime: showtimeId, movieIdchaiyohohai:movieId})
 
-        let isSeats;
+        let isSeats, showtimeDetails;
         const session = await mongoose.startSession();
         session.startTransaction();
         try{
@@ -82,6 +97,8 @@ class BookingCtrl{
             // const show = await Showtime.findOne({movieId})
             isSeats = await Seat.findOne({showtimeId:showtimeId})
 
+            // showtimeDetails = await Showtime.findById(showtimeId);
+    
             // return res.json({findingSeatsare: isSeats,movieId,showtimeId})
             if (!isSeats) {
                 return res.status(404).json({ message: "Seats not found for the provided showtimeId" });
@@ -147,9 +164,11 @@ class BookingCtrl{
                     bookingId: createBooking._id,
                     selectedSeats: seatNumber,
                     movieId: movieid,
-                    showtime: "12:00 AM"
+                    showtimeId: showtimeId,
+                    showtime: showtime,
+                    showDate: showDate,
                 })
-
+                // console.log("The generated tickets is: ",tickets);
                 await session.commitTransaction();
                 return res.status(201).json({
                     message: "Booking created successfully",tickets

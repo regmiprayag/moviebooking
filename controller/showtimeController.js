@@ -2,6 +2,7 @@
 import { showError } from "../lib/index.js";
 import Seat from "../models/Seat.js";
 import Showtime from "../models/Showtime.js";
+import Ticket from "../models/Ticket.js";
 
 
 class ShowtimeCtrl{
@@ -98,16 +99,28 @@ class ShowtimeCtrl{
     }
 
     updateShows = async(req,res,next)=>{
-        let showtime
+        let showtime,ticket
         try{
-            const {startTime,endTime} = req.body
-            // return res.json({startTime,endTime})
+            const {showDate,showTime} = req.body
+
+            console.log("The postman details are: ",showDate,showTime);
+
             const showtimeId = req.params.id
-            // return res.json({showtimeId})
+
+            
             showtime = await Showtime.findByIdAndUpdate(showtimeId,{
-                startTime,
-                endTime
+                showDate,
+                showTime: showTime
             })
+
+            ticket = await Ticket.findOneAndUpdate( {showtimeId} ,{
+                 showDate,
+                 showtime:showTime,
+                 status: 'Updated'
+                },
+                // { new: true } // Return the updated document
+            );
+
         }catch(err){
             showError(err,next)
         }

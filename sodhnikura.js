@@ -28,3 +28,6 @@
 // 
 
 // i have changes the schema of seat to selected seats from [Array] to [Number].
+
+// While booking tickets it's being saved 2 times 
+// and i want to update the tickets showTime too when updating the showtime

@@ -31,7 +31,18 @@ const Ticket = new mongoose.Schema({
     showtime:{
         type:String,
         required:true,
-    }
+    },
+    showtimeId:{
+        type: mongoose.Types.ObjectId,
+        ref:'Showtime',
+        required:true
+    },
+    status:{
+        type:String,
+        enum: ['None', 'Updated'],
+        default: 'None',
+    },
 })
 
-export default new mongoose.model("Ticket",Ticket)
+export default mongoose.model("Ticket", Ticket)
+// export default mongoose.model("User", User);

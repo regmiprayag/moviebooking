@@ -6,10 +6,16 @@ const Booking = new mongoose.Schema({
         ref:"User",
         required:true
     },
+    username:{
+        type:String,
+    },
     movieId:{
         type:mongoose.Types.ObjectId,
         ref:"Movie",
         required:true
+    },
+    moviename:{
+        type:String,
     },
     showtimeId:{
         type:mongoose.Types.ObjectId,

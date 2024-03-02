@@ -26,26 +26,18 @@ class MoviesCtrl {
         try{
             const { title,actors,description,director,releaseDate} = req.body
 
-            console.log("The values are: ",title,releaseDate,actors,description,director);
-
-            // const image = req.file ? req.file.filename : "New image not found"
-
-            // console.log("The image is: ",image);
-
-            // console.log("The formdata are: ",req.body);
             const movieId = req.params.id;
-            // console.log("The details are: ",movieId,title,releaseDate,actors,description,director);
-            // console.log("The image is: ",image);
-            
+
             prevMovies = await Movies.findById(movieId);
 
-            console.log("The previous movie is: ",prevMovies.posterUrl);
-
             let image;
-
             if(req.file){
                 image = req.file.filename;
-                // console.log("Image now: ",image);
+                const ext = image.split('.').pop().toLowerCase();
+                const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+                if(!allowedExtensions.includes(ext)){
+                    return res.json({message: 'Invalid image format. Please select a JPG, JPEG, PNG, or GIF file.'});
+                }
                 unlinkSync(`images/${prevMovies.posterUrl}`)
                 console.log("Unlink bhaye jasto xa hai");
 

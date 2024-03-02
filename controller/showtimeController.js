@@ -1,3 +1,4 @@
+// import { showtime } from "../../cms/src/pages/home/index.js";
 import { showError } from "../lib/index.js";
 import Seat from "../models/Seat.js";
 import Showtime from "../models/Showtime.js";
@@ -14,6 +15,18 @@ class ShowtimeCtrl{
         }catch(err){
             showError(err,next)
         }
+    }
+    getAllShows=async(req,res,next)=>{
+        let showtime;
+        try{
+            showtime = await Showtime.find();
+        }catch(err){
+            console.log(err)
+        }
+        if(!showtime){
+            return res.json({message: "Not found anything"})
+        }
+        return res.json({showtime});
     }
 
     getShowtimeById = async (req, res, next) => {
@@ -80,7 +93,7 @@ class ShowtimeCtrl{
         if (!showtime) {
             return res.status(200).send({ message: "No any Showtime Tomorrow" })
         }
-        console.log("In backend: ",showtime);
+        // console.log("In backend: ",showtime);
         return res.status(200).json({ showtime })
     }
 

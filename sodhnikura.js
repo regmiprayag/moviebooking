@@ -26,3 +26,5 @@
 
 // Aba tei euta isUserLoggedIn milauna parni xa. Ajahai milena yarr.
 // 
+
+// i have changes the schema of seat to selected seats from [Array] to [Number].

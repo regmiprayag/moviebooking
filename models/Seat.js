@@ -4,7 +4,7 @@ const Seat = new mongoose.Schema({
         type: Number
     },
     seatNumber : {
-        type: Array,
+        type: [Number],
         required: true
         // unique:true,
     },

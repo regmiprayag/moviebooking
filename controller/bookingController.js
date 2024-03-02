@@ -1,6 +1,7 @@
 import { createSignature, showError } from "../lib/index.js";
 import Booking from "../models/Booking.js";
 import Seat from "../models/Seat.js";
+import Ticket from "../models/Ticket.js";
 import Showtime from "../models/Showtime.js";
 // import User from "../models/User.js";
 import mongoose from "mongoose"
@@ -119,9 +120,39 @@ class BookingCtrl{
                 } catch (error) {
                     return res.status(500).json({ message: "Error updating seats", error: error.message });
                 }
+
+                // showDate:{
+                //     type:String,
+                //     required:true,
+                // },
+                // selectedSeats:{
+                //     type:[Number],
+                //     required:true,
+                // },
+                // movieId:{
+                //     type: mongoose.Types.ObjectId,
+                //     ref:'Movie',
+                //     required:true
+                // },
+                // showtime:{
+                //     type:String,
+                //     required:true,
+                // }
+
+                // const exactShowtime = sessionStorage.getItem("showTime")
+
+                let tickets;
+                tickets = await Ticket.create({
+                    userId: user,
+                    bookingId: createBooking._id,
+                    selectedSeats: seatNumber,
+                    movieId: movieid,
+                    showtime: "12:00 AM"
+                })
+
                 await session.commitTransaction();
                 return res.status(201).json({
-                    message: "Booking created successfully",showtimeId,movieid,user,seatNumber
+                    message: "Booking created successfully",tickets
                 });
             }
         }catch(err){
@@ -170,6 +201,27 @@ class BookingCtrl{
             return res.status(404).json({message:"No booking found"})
         }
         return res.status(500).json({message:"Deleted Successfully"})
+    }
+    deleteUserBooking = async(req,res,next)=>{
+        // const id = req.params.id;
+        // console.log("user id: ",userId);
+        const userId = req.params.id;
+        // console.log("UserId ",userId)
+        // return;
+        let booking
+        try{
+            booking = await Booking.deleteMany({userId: userId});
+
+        }catch(err){
+            // return next(new Error('Problem while deleting'))
+            console.log(err);
+        }
+        if(!booking){
+            return res.status(404).json({message:"No booking found"})
+            // console.log("Not deleted");
+        }
+        return res.status(200).json({message:"Deleted Successfully"})
+        // return console.log("Delete sucessfully");
     }
 }
 export default new BookingCtrl

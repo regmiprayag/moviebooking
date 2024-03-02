@@ -11,6 +11,7 @@ router.get("/movies",MoviesCtrl.getAllMovies)
 router.get("/movies/:id",MoviesCtrl.getMovieById)
 router.get("/users/:id",UserCtrl.getUserById)
 router.get("/showtimes/:id", ShowtimeCtrl.getShows)
+router.get("/showtimes", ShowtimeCtrl.getAllShows)
 router.get("/showtimesToday", ShowtimeCtrl.getShowtimeToday)
 router.get("/showtimesTommorow", ShowtimeCtrl.getShowtimeTommorrow)
 router.get("/showtimeById/:id", ShowtimeCtrl.getShowtimeById)
@@ -27,10 +28,11 @@ router.use("/common",isUserLoggedIn,commonRoutes)
 router.post("/login/user",LoginCtrl.checkUser)
 router.post("/signup/user",UserCtrl.signup)
 
-
 router.get('/images/:filename', (req, res, next) => {
     res.sendFile(`images/${req.params.filename}`, { root: './' })
 });
+
+router.delete("/deleteUserBooking/:id", BookingCtrl.deleteUserBooking);
 
 //when the user wants to book a movie
 router.use("/bookings",isUserLoggedIn,bookingRoutes)

@@ -2,6 +2,7 @@ import { showError } from "../lib/index.js";
 import Movies from "../models/Movies.js";
 import Seat from "../models/Seat.js";
 import Showtime from "../models/Showtime.js";
+import { unlinkSync } from "node:fs";
 
 class MoviesCtrl {
     getAllMovies = async (req, res, next) => {
@@ -21,19 +22,53 @@ class MoviesCtrl {
     }
 
     updateMovieById = async(req,res,next)=>{
-        let movies;
+        let movies, prevMovies;
         try{
-            const {title,releaseDate,actors,description,director} = req.body
+            const { title,actors,description,director,releaseDate} = req.body
+
+            console.log("The values are: ",title,releaseDate,actors,description,director);
+
+            // const image = req.file ? req.file.filename : "New image not found"
+
+            // console.log("The image is: ",image);
+
+            // console.log("The formdata are: ",req.body);
             const movieId = req.params.id;
             // console.log("The details are: ",movieId,title,releaseDate,actors,description,director);
-            movies = await Movies.findByIdAndUpdate(movieId,{
-                title:title,
-                actors:actors,
-                releaseDate:releaseDate,
-                // posterUrl: image,
-                director:director,
-                description:description
-            });
+            // console.log("The image is: ",image);
+            
+            prevMovies = await Movies.findById(movieId);
+
+            console.log("The previous movie is: ",prevMovies.posterUrl);
+
+            let image;
+
+            if(req.file){
+                image = req.file.filename;
+                // console.log("Image now: ",image);
+                unlinkSync(`images/${prevMovies.posterUrl}`)
+                console.log("Unlink bhaye jasto xa hai");
+
+                movies = await Movies.findByIdAndUpdate(movieId,{
+                    title:title,
+                    actors:actors,
+                    releaseDate:releaseDate,
+                    posterUrl: image,
+                    director:director,
+                    description:description
+                });
+            }
+            else{
+                movies = await Movies.findByIdAndUpdate(movieId,{
+                    title:title,
+                    actors:actors,
+                    releaseDate:releaseDate,
+                    posterUrl: prevMovies.posterUrl,
+                    director:director,
+                    description:description
+                });
+            }
+            
         }catch(err){
             return res.json({message: err.message})
         }
@@ -48,6 +83,7 @@ class MoviesCtrl {
         try {
             const movieId = req.params.id;
             movies = await Movies.findById(movieId)
+            // console.log("The movie details are: ",movies)
         }
         catch (err) {
             return res.status(400).json({ message: err })
@@ -59,27 +95,26 @@ class MoviesCtrl {
     }
 
     createMovie = async(req,res,next)=>{
-        // return res.json({message:"hello prayag"})
         try{
-
-            // return console.log("Inside req.body fields are: ",req.body);
+            let movie 
             const { title,actors,featured,price,description,director,releaseDate} = req.body
-            const image = req.file ? req.file.filename : "thait yarr"
-            // return res.json({image: image})
-            
-            await Movies.create({
+
+            const image = req.file ? req.file.filename:"thait yarr"
+
+            movie = await Movies.create({
                 title, actors, posterUrl:image, description, director, releaseDate, featured, price, adminId: req.admin._id
             })
 
-            res.status(201).json({message: "Movie created succesfully"})
+            res.status(200).json({message: "Movie created succesfully",movie})
         }
         catch(err){
             next({
                 message: "Movie not created",
-                status:400
+                // status:400
             })
         }
     }
+
     deleteMovie = async(req,res,next)=>{
         const id = req.params.id;
         let movie

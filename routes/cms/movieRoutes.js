@@ -15,7 +15,7 @@ router.route("/addshows/:id")
 
 router.route("/:id")
     .delete(MoviesCtrl.deleteMovie)
-    .put(MoviesCtrl.updateMovieById)
+    .put(upload.single('image'),MoviesCtrl.updateMovieById)
 
 router.route("/:id")
     .get(MoviesCtrl.getMovieById)

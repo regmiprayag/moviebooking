@@ -80,7 +80,6 @@ class ShowtimeCtrl{
             
             // Format the date as "YYYY-MM-DD"
             const tomorrowFormatted = tomorrow.toISOString().split('T')[0];
-            console.log("ZTommorow daps",tomorrowFormatted);
             // return;
             // return res.json({tomorrowFo;fomatted});
 

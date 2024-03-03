@@ -39,7 +39,6 @@ class MoviesCtrl {
                     return res.json({message: 'Invalid image format. Please select a JPG, JPEG, PNG, or GIF file.'});
                 }
                 unlinkSync(`images/${prevMovies.posterUrl}`)
-                console.log("Unlink bhaye jasto xa hai");
 
                 movies = await Movies.findByIdAndUpdate(movieId,{
                     title:title,
